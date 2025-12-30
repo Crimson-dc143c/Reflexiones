@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Reflexiones</title>
 
@@ -10,19 +10,21 @@
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0A7294">
 
-
   <style>
+    /* ===== BASE ===== */
     body {
+      margin: 0;
       font-family: 'Georgia', 'Times New Roman', serif;
       background: linear-gradient(180deg, #68E8E0, #C45AD6);
       display: flex;
       justify-content: center;
-      padding-top: 40px;
+      align-items: flex-start;
       color: #29464f;
       transition: background 0.4s ease, color 0.4s ease;
     }
 
     .app {
+      margin-top: 40px;
       background: linear-gradient(180deg, #B9EDEA, #F6D2FC);
       padding: 22px;
       border-radius: 16px;
@@ -31,6 +33,7 @@
       transition: background 0.4s ease;
     }
 
+    /* ===== CONTROLES ===== */
     #botonModo {
       background: transparent;
       border: none;
@@ -42,14 +45,14 @@
       margin-bottom: 6px;
     }
 
-  h2 {
+    h2 {
       font-weight: normal;
       font-size: 18px;
       line-height: 1.4;
       margin-bottom: 8px;
-    } 
+    }
 
-   textarea {
+    textarea {
       width: 100%;
       height: 90px;
       margin-top: 10px;
@@ -62,8 +65,8 @@
       font-family: inherit;
     }
 
-
-    select, input[type="text"] {
+    select,
+    input[type="text"] {
       width: 100%;
       margin-top: 8px;
       padding: 8px;
@@ -74,21 +77,10 @@
       font-family: inherit;
     }
 
-#busqueda {
-  margin-top: 8px;
-  padding: 6px;
-  font-size: 13px;
-  box-sizing: border-box;
-  border-radius: 10px;
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 10px;
-  border: 1px solid #0A7294;
-  background: #E6F7FA;
-  display: block;
-}
-
+    #busqueda {
+      margin-bottom: 10px;
+      font-size: 13px;
+    }
 
     button {
       margin-top: 10px;
@@ -105,11 +97,7 @@
       background: #50bbde;
     }
 
-    .respuestas {
-      margin-top: 18px;
-      font-size: 14px;
-    }
-
+    /* ===== ITEMS ===== */
     .item {
       margin-bottom: 12px;
       padding: 10px;
@@ -121,23 +109,16 @@
       line-height: 1.5;
     }
 
-   small {
+    small {
       color: #50bbde;
     }
 
     @keyframes aparecer {
-      from {
-        opacity: 0;
-        transform: translateY(8px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    /* 🌙 MODO NOCHE */
-
+    /* ===== MODO NOCHE ===== */
     body.noche {
       background: linear-gradient(180deg, #005c56, #4c0059);
       color: #e0f2f1;
@@ -168,8 +149,7 @@
       color: #4dd0e1;
     }
 
-
-    /* MODAL */
+    /* ===== MODAL ===== */
     .modal {
       display: none;
       position: fixed;
@@ -191,72 +171,43 @@
       color: #e0f2f1;
     }
 
-/* ===== MODO SOLO CELULAR ===== */
-@media (max-width: 600px) {
-  
-  body {
-    margin: 0;
-    padding: 0;
-    background: var(--bg-color);
-  }
+    /* ===== MÓVIL / PWA ===== */
+    @media (max-width: 600px) {
+      body {
+        align-items: stretch;
+      }
 
-  .app {
-    width: 100%;
-    max-width: 100%;
-    min-height: 100vh;
-    border-radius: 0;
-    box-shadow: none;
-    padding: 16px;
-  }
+      .app {
+        margin-top: 0;
+        width: 100%;
+        min-height: 100vh;
+        border-radius: 0;
+        box-shadow: none;
+        padding: 16px;
+      }
 
-}
+      input,
+      textarea,
+      select {
+        font-size: 16px;
+        padding: 12px;
+        border-radius: 14px;
+      }
 
-@media (max-width: 600px) {
+      button {
+        padding: 14px;
+        font-size: 16px;
+        border-radius: 18px;
+      }
+    }
 
-  input[type="text"],
-  textarea,
-  select {
-    font-size: 16px; /* importante para Android */
-    padding: 12px;
-    border-radius: 14px;
-  }
-
-  button {
-    width: 100%;
-    padding: 14px;
-    font-size: 16px;
-    border-radius: 18px;
-  }
-
-}
-@media (max-width: 600px) {
-
-  .controls,
-  .toolbar,
-  .actions {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-}
-@media (max-width: 600px) {
-
-  body.dark {
-    background: #0f172a;
-  }
-
-  body.dark .app {
-    background: #020617;
-  }
-
-}
-
-
-button, input, textarea, select {
-  touch-action: manipulation;
-}
-
-
+    button,
+    input,
+    textarea,
+    select {
+      touch-action: manipulation;
+    }
+  </style>
 </head>
 
 <body>
@@ -281,7 +232,7 @@ button, input, textarea, select {
     <div id="lista"></div>
   </div>
 
-  <!-- MODAL (AQUÍ SÍ VA) -->
+  <!-- MODAL -->
   <div class="modal" id="modal">
     <div class="modal-content">
       <h3>Editar reflexión</h3>
@@ -292,7 +243,6 @@ button, input, textarea, select {
         <option>❓ Duda</option>
         <option>✨ Sueño</option>
         <option>💗 Deseo</option>
-
       </select>
       <button onclick="guardarEdicion()">Guardar</button>
       <button onclick="cerrarModal()">Cancelar</button>
@@ -305,8 +255,7 @@ button, input, textarea, select {
 
     function mostrarTitulo() {
       const hoy = new Date();
-      document.getElementById("titulo").innerText =
-        "Welcome today ♥ — " + hoy.toLocaleDateString();
+      titulo.innerText = "Welcome today ♥ — " + hoy.toLocaleDateString();
     }
 
     function guardarRespuesta() {
@@ -363,31 +312,24 @@ button, input, textarea, select {
       modal.style.display = "none";
     }
 
-  function toggleModo() {
+    function toggleModo() {
       document.body.classList.toggle("noche");
       const esNoche = document.body.classList.contains("noche");
-
-      document.getElementById("botonModo").innerText =
-        esNoche ? "☀️ Modo calma" : "🌙 Modo noche";
-
+      botonModo.innerText = esNoche ? "☀️ Modo calma" : "🌙 Modo noche";
       localStorage.setItem("modo", esNoche ? "noche" : "calma");
     }
 
-    const modoGuardado = localStorage.getItem("modo");
-    if (modoGuardado === "noche") {
+    if (localStorage.getItem("modo") === "noche") {
       document.body.classList.add("noche");
-      document.getElementById("botonModo").innerText = "☀️ Modo calma";
+      botonModo.innerText = "☀️ Modo calma";
     }
 
     mostrarTitulo();
     mostrarRespuestas();
 
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker
-      .register("sw.js")
-      .then(() => console.log("SW registrado"))
-      .catch(err => console.log("SW error", err));
-  }
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("sw.js");
+    }
   </script>
 
 </body>
