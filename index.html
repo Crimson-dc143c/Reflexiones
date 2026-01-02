@@ -1,336 +1,655 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Reflexiones</title>
-
-  <!-- PWA -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0A7294">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Crimson | Vitality</title>
 
   <style>
-    /* ===== BASE ===== */
+    /* --- CONFIGURACIÓN GLOBAL --- */
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    :root {
+      --bg-gradient: radial-gradient(circle at top, #3d0000, #0a0000);
+      --text-primary: #f5eaea;
+      --text-dim: rgba(245, 234, 234, 0.6);
+      --crimson-glow: #ff2e2e;
+      --crimson-dark: #681414;
+      --crimson-bright: #dc3c3c;
+      --glass: rgba(255, 255, 255, 0.07);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --input-bg: rgba(0,0,0,0.45);
+      --nav-bg: rgba(15, 0, 0, 0.96);
+    }
+
+    body.light-mode {
+      --bg-gradient: linear-gradient(180deg, #f0e2e2, #d6baba);
+      --text-primary: #4a1212;
+      --text-dim: rgba(74, 18, 18, 0.7);
+      --crimson-glow: #dc3c3c;
+      --crimson-dark: #a32a2a;
+      --crimson-bright: #ff2e2e;
+      --glass: rgba(255, 255, 255, 0.65);
+      --glass-border: rgba(104, 20, 20, 0.25);
+      --input-bg: rgba(255,255,255,0.75);
+      --nav-bg: rgba(240, 226, 226, 0.96);
+    }
+
     body {
-      margin: 0;
-      font-family: 'Georgia', 'Times New Roman', serif;
-      background: linear-gradient(180deg, #68E8E0, #C45AD6);
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      color: #29464f;
-      transition: background 0.4s ease, color 0.4s ease;
+      margin: 0; padding: 0;
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-primary);
+      min-height: 100vh;
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      padding-bottom: 120px;
+      overflow-x: hidden;
     }
 
-    .app {
-      margin-top: 40px;
-      background: linear-gradient(180deg, #B9EDEA, #F6D2FC);
-      padding: 22px;
-      border-radius: 16px;
-      width: 360px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.18);
-      transition: background 0.4s ease;
+    /* =========================
+       SPLASH SCREEN (LOTO)
+       ========================= */
+    #splash {
+      position: fixed; inset: 0;
+      background: radial-gradient(circle at center, #1a0505 0%, #050000 100%);
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      z-index: 20000;
+      transition: opacity 1.5s ease, visibility 1.5s;
     }
-
-    /* ===== CONTROLES ===== */
-    #botonModo {
-      background: transparent;
-      border: none;
-      width: 100%;
-      text-align: right;
-      font-size: 13px;
-      cursor: pointer;
-      color: #0A7294;
-      margin-bottom: 6px;
+    .lotus { position: relative; width: 180px; height: 180px; display: flex; justify-content: center; align-items: center; }
+    .brand-name {
+      margin-top: 40px; color: #f5eaea; font-size: 28px; letter-spacing: 8px;
+      text-transform: uppercase; font-weight: 300; opacity: 0;
+      animation: fadeInText 3s ease-out forwards; animation-delay: 1.2s;
+      text-shadow: 0 0 15px rgba(255, 75, 75, 0.4); font-family: 'Georgia', serif;
     }
-
-    h2 {
-      font-weight: normal;
-      font-size: 18px;
-      line-height: 1.4;
-      margin-bottom: 8px;
+    .core {
+      position: absolute; width: 20px; height: 20px; border-radius: 50%;
+      background: radial-gradient(circle, #ffd2d2, #ff4b4b);
+      box-shadow: 0 0 30px rgba(255, 75, 75, 0.8); z-index: 10;
+      animation: breathe 3s ease-in-out infinite;
     }
-
-    textarea {
-      width: 100%;
-      height: 90px;
-      margin-top: 10px;
-      padding: 10px;
-      box-sizing: border-box;
-      border-radius: 10px;
-      border: 1px solid #bde7f0;
-      background: #ffffff;
-      resize: none;
-      font-family: inherit;
+    .petal {
+      position: absolute; bottom: 50%; width: 35px; height: 85px;
+      background: linear-gradient(to top, rgba(120, 0, 0, 0.9), rgba(255, 80, 120, 0.4));
+      border-radius: 50% 50% 50% 50% / 80% 80% 20% 20%;
+      transform-origin: bottom center; opacity: 0; filter: blur(0.5px);
+      border: 0.5px solid rgba(255, 255, 255, 0.1);
+      animation: blossom 3.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      animation-delay: calc(var(--i) * 0.1s);
     }
+    .fade-out { opacity: 0; visibility: hidden; pointer-events: none; }
 
-    select,
-    input[type="text"] {
-      width: 100%;
-      margin-top: 8px;
-      padding: 8px;
-      box-sizing: border-box;
-      border-radius: 10px;
-      border: 1px solid #0A7294;
-      background: #E6F7FA;
-      font-family: inherit;
+    @keyframes blossom { 0% { opacity: 0; transform: rotate(calc(var(--i) * 45deg)) scale(0) translateY(0); } 30% { opacity: 0.8; } 100% { opacity: 1; transform: rotate(calc(var(--i) * 45deg)) scale(1) translateY(-15px); } }
+    @keyframes fadeInText { from { opacity: 0; transform: translateY(10px); filter: blur(5px); } to { opacity: 0.8; transform: translateY(0); filter: blur(0); } }
+    @keyframes breathe { 0%, 100% { transform: scale(1); filter: brightness(1); } 50% { transform: scale(1.15); filter: brightness(1.3); } }
+
+    /* --- ANIMACIONES APP --- */
+    @keyframes entry { from { opacity: 0; transform: scale(0.95) translateY(15px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+    @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(255, 46, 46, 0.5); } 70% { box-shadow: 0 0 0 15px rgba(255, 46, 46, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 46, 46, 0); } }
+    
+    /* Animación del Sol/Luna */
+    @keyframes orbital-spin {
+        0% { transform: rotate(0deg) scale(1); }
+        50% { transform: rotate(180deg) scale(1.3); }
+        100% { transform: rotate(360deg) scale(1); }
     }
+    .spin-anim { animation: orbital-spin 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55); }
 
-    #busqueda {
-      margin-bottom: 10px;
-      font-size: 13px;
+    .item { animation: entry 0.5s cubic-bezier(0.2, 1, 0.3, 1) backwards; transition: 0.4s; }
+    
+    /* --- UI PRINCIPAL --- */
+    .container { width: 92%; max-width: 500px; margin: 0 auto; padding: 25px 0; }
+    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+    h1 { font-family: 'Georgia', serif; letter-spacing: 4px; margin: 0; text-shadow: 0 0 20px var(--crimson-glow); }
+
+    .composer { background: var(--glass); padding: 22px; border-radius: 30px; margin-bottom: 30px; border: 1px solid var(--glass-border); backdrop-filter: blur(10px); }
+    input, textarea, select {
+      width: 100%; margin-bottom: 14px; padding: 15px; border-radius: 18px;
+      border: 1px solid var(--glass-border); background: var(--input-bg);
+      color: var(--text-primary); font-size: 16px; outline: none; transition: 0.3s;
     }
+    input:focus, textarea:focus { border-color: var(--crimson-glow); box-shadow: 0 0 10px rgba(255,46,46,0.2); }
 
-    button {
-      margin-top: 10px;
-      padding: 10px;
-      width: 100%;
-      border-radius: 12px;
-      border: none;
-      background: #0A7294;
-      color: #fff;
-      cursor: pointer;
+    .main-btn { width: 100%; padding: 16px; border-radius: 18px; border: none; background: var(--crimson-dark); color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
+    .main-btn:active { transform: scale(0.96); }
+
+    /* Estilos Modal Botones */
+    .modal-btn-group { display: flex; gap: 10px; width: 100%; margin-top: 15px; }
+    .modal-btn { flex: 1; padding: 12px; border-radius: 15px; border: none; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    .btn-edit { background: var(--glass); color: var(--text-primary); border: 1px solid var(--glass-border); }
+    .btn-del { background: rgba(255,0,0,0.2); color: #ff6b6b; border: 1px solid rgba(255,0,0,0.3); }
+    .btn-save { background: var(--crimson-dark); color: white; }
+
+    .pill { white-space: nowrap; padding: 10px 22px; border-radius: 25px; background: var(--glass); border: 1px solid var(--glass-border); font-size: 0.8rem; cursor: pointer; transition: 0.3s; }
+    .pill.active { background: var(--crimson-dark); border-color: var(--crimson-bright); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+
+    .mood-bar { display: flex; justify-content: space-around; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 20px; margin-bottom: 15px; border: 1px solid var(--glass-border); }
+    .mood-icon { font-size: 1.4rem; cursor: pointer; opacity: 0.3; transition: 0.4s; filter: grayscale(1); }
+    .mood-icon.active { opacity: 1; transform: scale(1.35) rotate(5deg); filter: grayscale(0); }
+
+    /* --- ESTILOS DE GALERÍA (FIX CARRUSEL) --- */
+    .gallery-scroll {
+      display: flex; overflow-x: auto; gap: 15px; padding: 10px 5px 20px 5px;
+      scroll-snap-type: x mandatory; scrollbar-width: none;
     }
+    .gallery-scroll::-webkit-scrollbar { display: none; }
 
-    button:hover {
-      background: #50bbde;
+    .gallery-card {
+      flex: 0 0 auto; width: 200px; scroll-snap-align: start;
+      background: var(--glass); border-radius: 22px; padding: 12px;
+      border: 1px solid var(--glass-border); display: flex; flex-direction: column;
+      transition: transform 0.3s ease;
     }
+    .gallery-card:active { transform: scale(0.97); }
 
-    /* ===== ITEMS ===== */
-    .item {
-      margin-bottom: 12px;
-      padding: 10px;
-      border-radius: 10px;
-      background: #ffffff;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-      animation: aparecer 0.4s ease;
-      font-size: 13px;
-      line-height: 1.5;
+    .gallery-img-box { width: 100%; aspect-ratio: 1/1; border-radius: 16px; overflow: hidden; margin-bottom: 10px; position: relative; }
+    .gallery-img-box img { width: 100%; height: 100%; object-fit: cover; }
+
+    .date-link {
+      font-size: 0.75rem; color: var(--crimson-bright); margin-top: 5px; 
+      display: inline-block; padding: 4px 10px; background: rgba(255,0,0,0.1);
+      border-radius: 12px; cursor: pointer; transition: 0.2s;
     }
+    .date-link:hover { background: var(--crimson-dark); color: white; }
 
-    small {
-      color: #50bbde;
-    }
+    /* --- AUDIO & NAV --- */
+    .rec-box { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 50px; }
+    .rec-btn { background: #222; color: white; border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; font-size: 1.1rem; }
+    .rec-btn.recording { background: var(--crimson-glow); animation: pulse-red 1s infinite; }
+    
+    .bottom-nav { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 450px; background: var(--nav-bg); height: 80px; display: flex; justify-content: space-around; align-items: center; border-radius: 40px; border: 1px solid var(--glass-border); z-index: 1000; backdrop-filter: blur(25px); box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
+    .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-dim); transition: 0.4s; }
+    .nav-item.active { color: var(--crimson-bright); transform: translateY(-5px); }
+    .nav-item .icon { font-size: 1.5rem; margin-bottom: 3px; }
 
-    @keyframes aparecer {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ===== MODO NOCHE ===== */
-    body.noche {
-      background: linear-gradient(180deg, #005c56, #4c0059);
-      color: #e0f2f1;
-    }
-
-    body.noche .app {
-      background: linear-gradient(180deg, #00302e, #25002b);
-    }
-
-    body.noche textarea,
-    body.noche select,
-    body.noche input[type="text"] {
-      background: #1c2b33;
-      color: #e0f2f1;
-      border: 1px solid #4dd0e1;
-    }
-
-    body.noche .item {
-      background: #1c2b33;
-    }
-
-    body.noche button {
-      background: #4dd0e1;
-      color: #00363a;
-    }
-
-    body.noche #botonModo {
-      color: #4dd0e1;
-    }
-
-    /* ===== MODAL ===== */
-    .modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.6);
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal-content {
-      background: #cdedf7;
-      padding: 20px;
-      border-radius: 16px;
-      width: 320px;
-    }
-
-    body.noche .modal-content {
-      background: #1c2b33;
-      color: #e0f2f1;
-    }
-
-    /* ===== MÓVIL / PWA ===== */
-    @media (max-width: 600px) {
-      body {
-        align-items: stretch;
-      }
-
-      .app {
-        margin-top: 0;
-        width: 100%;
-        min-height: 100vh;
-        border-radius: 0;
-        box-shadow: none;
-        padding: 16px;
-      }
-
-      input,
-      textarea,
-      select {
-        font-size: 16px;
-        padding: 12px;
-        border-radius: 14px;
-      }
-
-      button {
-        padding: 14px;
-        font-size: 16px;
-        border-radius: 18px;
-      }
-    }
-
-    button,
-    input,
-    textarea,
-    select {
-      touch-action: manipulation;
-    }
+    .hidden { display: none !important; }
   </style>
 </head>
-
 <body>
 
-  <div class="app">
-    <button id="botonModo" onclick="toggleModo()">🌙 Modo noche</button>
-    <h2 id="titulo"></h2>
-
-    <textarea id="respuesta" placeholder="Escribe lo que piensas..."></textarea>
-
-    <select id="tipo">
-      <option>🧠 Reflexión</option>
-      <option>💡 Idea</option>
-      <option>❓ Duda</option>
-      <option>✨ Sueño</option>
-      <option>💗 Deseo</option>
-    </select>
-
-    <button onclick="guardarRespuesta()">Guardar reflexión</button>
-
-    <input id="busqueda" placeholder="Buscar..." oninput="mostrarRespuestas()">
-    <div id="lista"></div>
+  <div id="splash">
+    <div class="lotus">
+      <div class="core"></div>
+      <div class="petal" style="--i:0"></div>
+      <div class="petal" style="--i:1"></div>
+      <div class="petal" style="--i:2"></div>
+      <div class="petal" style="--i:3"></div>
+      <div class="petal" style="--i:4"></div>
+      <div class="petal" style="--i:5"></div>
+      <div class="petal" style="--i:6"></div>
+      <div class="petal" style="--i:7"></div>
+    </div>
+    <div class="brand-name">Crimson</div>
   </div>
 
-  <!-- MODAL -->
-  <div class="modal" id="modal">
-    <div class="modal-content">
-      <h3>Editar reflexión</h3>
-      <textarea id="editarTexto"></textarea>
-      <select id="editarTipo">
-        <option>🧠 Reflexión</option>
-        <option>💡 Idea</option>
-        <option>❓ Duda</option>
-        <option>✨ Sueño</option>
-        <option>💗 Deseo</option>
-      </select>
-      <button onclick="guardarEdicion()">Guardar</button>
-      <button onclick="cerrarModal()">Cancelar</button>
+  <div id="auth-screen" style="position:fixed; inset:0; background:var(--bg-gradient); z-index:10000; display:flex; align-items:center; justify-content:center;">
+    <div id="auth-login" class="auth-card" style="text-align:center; background:var(--glass); padding:45px; border-radius:40px; border:1px solid var(--glass-border); width:85%; max-width:360px;">
+      <h1 style="margin-bottom:30px;">CRIMSON</h1>
+      <input type="text" id="log-user" placeholder="Usuario">
+      <input type="password" id="log-pass" placeholder="Contraseña">
+      <button class="main-btn" onclick="handleLogin()" style="margin-top:10px;">Entrar al Diario</button>
+      <div style="margin-top:25px; font-size:0.85rem; opacity:0.6;">
+        <span onclick="showAuth('auth-reg')" style="cursor:pointer">Unirse</span> | <span onclick="showAuth('auth-rec')" style="cursor:pointer">Recuperar</span>
+      </div>
+    </div>
+    
+    <div id="auth-reg" class="auth-card hidden" style="text-align:center; background:var(--glass); padding:35px; border-radius:40px; border:1px solid var(--glass-border); width:85%; max-width:360px;">
+      <h2>Nuevo Inicio</h2>
+      <input type="text" id="reg-user" placeholder="Usuario">
+      <input type="password" id="reg-pass" placeholder="Contraseña">
+      <select id="reg-q"><option>¿Lugar favorito?</option><option>¿Tu mascota?</option></select>
+      <input type="text" id="reg-a" placeholder="Respuesta">
+      <button class="main-btn" onclick="handleRegister()">Registrar</button>
+      <p onclick="showAuth('auth-login')" style="cursor:pointer; font-size:0.8rem; margin-top:15px;">Volver</p>
+    </div>
+
+    <div id="auth-rec" class="auth-card hidden" style="text-align:center; background:var(--glass); padding:35px; border-radius:40px; border:1px solid var(--glass-border); width:85%; max-width:360px;">
+      <h2>Recuperar</h2>
+      <input type="text" id="rec-user" placeholder="Usuario" onblur="updateRecQuestion()">
+      <p id="rec-q-text" style="font-size:0.8rem; color:var(--crimson-bright);"></p>
+      <input type="text" id="rec-a" placeholder="Respuesta">
+      <input type="password" id="rec-newpass" placeholder="Nueva Clave" class="hidden">
+      <button class="main-btn" id="rec-btn" onclick="handleRecovery()">Verificar</button>
+      <p onclick="showAuth('auth-login')" style="cursor:pointer; font-size:0.8rem; margin-top:15px;">Cancelar</p>
     </div>
   </div>
 
+  <div class="container hidden" id="main-app">
+    <header>
+      <div>
+        <h1 id="app-title">DIARIO</h1>
+        <div id="fechaHoy" style="font-size:0.85rem; opacity:0.6; font-weight:300;"></div>
+      </div>
+      <div class="pill" onclick="toggleTheme(this)" id="themeBtn" style="font-size:1.3rem; display:flex; align-items:center; justify-content:center; width:50px; height:50px;">🌙</div>
+    </header>
+
+    <div style="display:flex; gap:15px; margin-bottom:25px;">
+      <input type="text" id="buscador" placeholder="Explorar recuerdos..." oninput="render()" style="margin-bottom:0">
+      <button id="bulb-btn" onclick="getPrompt()" style="background:var(--glass); border:1px solid var(--glass-border); border-radius:20px; padding:0 18px; cursor:pointer;">💡</button>
+    </div>
+
+    <div id="view-journal">
+      <div class="filter-bar" id="cat-filters" style="display:flex; gap:12px; overflow-x:auto; padding-bottom:15px; scrollbar-width:none;">
+        <div class="pill active" onclick="setCatFilter('Todos')">Todos</div>
+        <div class="pill" onclick="setCatFilter('Pensamiento')">💭 Pensamiento</div>
+        <div class="pill" onclick="setCatFilter('Objetivo')">🎯 Objetivo</div>
+        <div class="pill" onclick="setCatFilter('Canción')">🎵 Canción</div>
+        <div class="pill" onclick="setCatFilter('Regla')">📜 Regla</div>
+        <div class="pill" onclick="setCatFilter('Libro')">📚 Libro</div>
+      </div>
+
+      <div class="composer">
+        <div class="mood-bar">
+          <span class="mood-icon active" onclick="setMood('calm', this)">✨</span>
+          <span class="mood-icon" onclick="setMood('happy', this)">😊</span>
+          <span class="mood-icon" onclick="setMood('love', this)">❤️</span>
+          <span class="mood-icon" onclick="setMood('sad', this)">😢</span>
+          <span class="mood-icon" onclick="setMood('angry', this)">🔥</span>
+        </div>
+        <textarea id="note-text" placeholder="¿Cómo te sientes hoy?" rows="4"></textarea>
+        
+        <div class="rec-box">
+          <button id="audio-btn" class="rec-btn" onclick="toggleRecording()">🎙️</button>
+          <span id="rec-label" class="rec-label">● GRABANDO...</span>
+          <span id="audio-status" style="font-size:0.75rem; opacity:0.6;">Nota de voz</span>
+        </div>
+
+        <input type="text" id="note-tags" placeholder="#etiquetas, momentos...">
+        <div style="display:flex; gap:12px;">
+          <select id="note-type">
+            <option>💭 Pensamiento</option>
+            <option>🎯 Objetivo</option>
+            <option>🎵 Canción</option>
+            <option>📜 Regla</option>
+            <option>📚 Libro</option>
+          </select>
+          <input type="date" id="capsule-date" title="Sellar cápsula hasta...">
+        </div>
+        <button class="main-btn" id="saveBtn" onclick="saveNote()">Eternizar Registro</button>
+        <button class="main-btn hidden" id="cancelEditBtn" onclick="cancelEdit()" style="background:none; border:1px solid; margin-top:10px;">Cancelar</button>
+      </div>
+
+      <div style="display:flex; gap:15px; margin-bottom:20px;">
+        <button class="pill active" id="tab-act" onclick="setTab('activos')">Vivos</button>
+        <button class="pill" id="tab-pap" onclick="setTab('papelera')">Papelera</button>
+      </div>
+      <div id="journal-list"></div>
+    </div>
+
+    <div id="view-gallery" class="hidden">
+      <div class="composer">
+        <input type="file" id="img-file" accept="image/*" style="padding:12px">
+        <input type="text" id="img-caption" placeholder="Describe esta captura...">
+        <button class="main-btn" onclick="saveImage()">Guardar Imagen</button>
+      </div>
+      <div id="gallery-container"></div>
+    </div>
+
+    <div id="view-stats" class="hidden">
+      <h2 style="font-family:serif; letter-spacing:2px; margin-bottom:20px;">TU VÍNCULO</h2>
+      <div id="stats-content"></div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav hidden" id="nav-bar">
+    <div class="nav-item active" id="nav-j" onclick="switchView('journal')"><span class="icon">📜</span><span style="font-size:0.75rem">Diario</span></div>
+    <div class="nav-item" id="nav-g" onclick="switchView('gallery')"><span class="icon">🖼️</span><span style="font-size:0.75rem">Fotos</span></div>
+    <div class="nav-item" id="nav-s" onclick="switchView('stats')"><span class="icon">📊</span><span style="font-size:0.75rem">Vínculo</span></div>
+    <div class="nav-item" onclick="location.reload()"><span class="icon">🔒</span><span style="font-size:0.75rem">Salir</span></div>
+  </nav>
+
+  <div id="image-modal" style="position:fixed; inset:0; background:rgba(0,0,0,0.98); z-index:5000; display:none; flex-direction:column; align-items:center; justify-content:center; backdrop-filter:blur(15px); padding:20px;">
+    
+    <img id="modal-img" src="" style="max-width:100%; max-height:55vh; border-radius:25px; box-shadow:0 0 40px rgba(0,0,0,0.5); object-fit:contain;">
+    
+    <div id="modal-read-mode" style="width:100%; max-width:400px; text-align:center;">
+      <p id="modal-caption" style="color:white; margin:20px 0 5px 0; font-size:1.1rem; text-align:center;"></p>
+      <p id="modal-date" style="color:var(--crimson-bright); font-size:0.8rem; margin-bottom:20px;"></p>
+      
+      <div class="modal-btn-group">
+         <button class="modal-btn btn-edit" onclick="toggleEditImgMode(true)">✏️ Editar</button>
+         <button class="modal-btn btn-del" onclick="deleteCurrentImg()">🗑️ Borrar</button>
+      </div>
+      <button class="main-btn" onclick="closeModal()" style="width:auto; padding:12px 45px; background:#333; margin-top:20px;">Cerrar</button>
+    </div>
+
+    <div id="modal-edit-mode" class="hidden" style="width:100%; max-width:400px; margin-top:20px;">
+      <input type="text" id="edit-img-caption" placeholder="Nueva descripción">
+      <input type="date" id="edit-img-date">
+      <div class="modal-btn-group">
+        <button class="modal-btn btn-save" onclick="saveImgChanges()">💾 Guardar</button>
+        <button class="modal-btn btn-edit" onclick="toggleEditImgMode(false)">Cancelar</button>
+      </div>
+    </div>
+
+  </div>
+
   <script>
-    let respuestas = JSON.parse(localStorage.getItem("respuestas")) || [];
-    let indiceEditando = null;
+    // --- LÓGICA DE SPLASH SCREEN ---
+    window.addEventListener("load", () => {
+      const splash = document.getElementById("splash");
+      setTimeout(() => {
+        splash.classList.add("fade-out");
+      }, 4500); 
+    });
 
-    function mostrarTitulo() {
-      const hoy = new Date();
-      titulo.innerText = "Welcome today ♥ — " + hoy.toLocaleDateString();
+    // --- BASE DE DATOS ---
+    let db = JSON.parse(localStorage.getItem("crimson_vitality_v13")) || { users: {} };
+    let currentUser = null, currentTab = 'activos', currentView = 'journal', editID = null;
+    let selectedCat = 'Todos', selectedMood = 'calm', audioBlob = null, mediaRecorder = null;
+    let currentImgId = null; // Para saber qué imagen estamos viendo
+
+    const prompts = ["¿Qué libro te hizo pensar hoy?", "¿Cuál es tu meta más ambiciosa?", "¿Qué emoción te define ahora?", "Escribe una regla que nunca romperás."];
+    const saveDB = () => localStorage.setItem("crimson_vitality_v13", JSON.stringify(db));
+
+    // --- EMOCIONES ---
+    function setMood(m, el) {
+      selectedMood = m;
+      document.querySelectorAll('.mood-icon').forEach(i => i.classList.remove('active'));
+      el.classList.add('active');
     }
 
-    function guardarRespuesta() {
-      const texto = respuesta.value.trim();
-      if (!texto) return;
-
-      respuestas.push({
-        texto,
-        tipo: tipo.value,
-        fecha: new Date().toLocaleString()
-      });
-
-      localStorage.setItem("respuestas", JSON.stringify(respuestas));
-      respuesta.value = "";
-      mostrarRespuestas();
+    // --- AUTH & RECUPERACIÓN ---
+    function showAuth(id) { document.querySelectorAll('.auth-card').forEach(c => c.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); }
+    function handleRegister() {
+      const u = document.getElementById('reg-user').value.trim();
+      if(!u || db.users[u]) return alert("Usuario no disponible");
+      db.users[u] = { pass:document.getElementById('reg-pass').value, question:document.getElementById('reg-q').value, answer:document.getElementById('reg-a').value.toLowerCase(), notes:[], gallery:[] };
+      saveDB(); showAuth('auth-login');
+    }
+    function handleLogin() {
+      const u = document.getElementById('log-user').value.trim(), p = document.getElementById('log-pass').value;
+      if(db.users[u] && db.users[u].pass === p) {
+        currentUser = u; document.getElementById('auth-screen').classList.add('hidden');
+        document.getElementById('main-app').classList.remove('hidden'); document.getElementById('nav-bar').classList.remove('hidden'); render();
+      } else alert("Error de acceso");
+    }
+    function updateRecQuestion() { const u = document.getElementById('rec-user').value.trim(); document.getElementById('rec-q-text').innerText = db.users[u]?.question || "No existe"; }
+    function handleRecovery() {
+      const u = document.getElementById('rec-user').value.trim(), a = document.getElementById('rec-a').value.toLowerCase();
+      const btn = document.getElementById('rec-btn');
+      if(btn.innerText === "Verificar") {
+        if(db.users[u]?.answer === a) { document.getElementById('rec-newpass').classList.remove('hidden'); btn.innerText = "Cambiar Clave"; }
+      } else { db.users[u].pass = document.getElementById('rec-newpass').value; saveDB(); showAuth('auth-login'); }
     }
 
-    function mostrarRespuestas() {
-      lista.innerHTML = "";
-      respuestas.forEach((r, i) => {
-        lista.innerHTML += `
-          <div class="item">
-            <strong>${i + 1}.</strong> ${r.tipo}<br>
-            ${r.texto}<br>
-            <small>${r.fecha}</small><br>
-            <button onclick="abrirModal(${i})">✏️ Editar</button>
-            <button onclick="borrarRespuesta(${i})">🗑️ Borrar</button>
-          </div>`;
-      });
+    // --- AUDIO ---
+    async function toggleRecording() {
+      const btn = document.getElementById('audio-btn');
+      const label = document.getElementById('rec-label');
+      if (!mediaRecorder || mediaRecorder.state === "inactive") {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          mediaRecorder = new MediaRecorder(stream);
+          let chunks = [];
+          mediaRecorder.ondataavailable = e => chunks.push(e.data);
+          mediaRecorder.onstop = () => {
+            const blob = new Blob(chunks, { type: 'audio/ogg; codecs=opus' });
+            const r = new FileReader();
+            r.onload = () => { audioBlob = r.result; document.getElementById('audio-status').innerText = "Voz capturada ✅"; };
+            r.readAsDataURL(blob);
+          };
+          mediaRecorder.start();
+          btn.classList.add('recording'); label.style.display = 'inline';
+        } catch(e) { alert("Microfono bloqueado"); }
+      } else {
+        mediaRecorder.stop();
+        btn.classList.remove('recording'); label.style.display = 'none';
+      }
     }
 
-    function borrarRespuesta(i) {
-      respuestas.splice(i, 1);
-      localStorage.setItem("respuestas", JSON.stringify(respuestas));
-      mostrarRespuestas();
+    // --- RENDERIZADO PRINCIPAL ---
+    function render() {
+      if(!currentUser) return;
+      const search = document.getElementById('buscador').value.toLowerCase();
+      const moodEmojis = { calm:'✨', happy:'😊', love:'❤️', sad:'😢', angry:'🔥' };
+
+      // VISTA DIARIO
+      if(currentView === 'journal') {
+        const list = document.getElementById('journal-list'); list.innerHTML = "";
+        let notes = db.users[currentUser].notes.filter(n => currentTab === 'activos' ? !n.deleted : n.deleted);
+        
+        if(selectedCat !== 'Todos') notes = notes.filter(n => n.type.includes(selectedCat));
+        if(search) notes = notes.filter(n => {
+          const dateStr = new Date(n.date).toLocaleDateString();
+          return n.text.toLowerCase().includes(search) || n.tags.some(t => t.includes(search)) || dateStr.includes(search);
+        });
+
+        // Ordenar notas por fecha (más reciente primero)
+        notes.sort((a,b) => new Date(b.date) - new Date(a.date));
+
+        notes.forEach((n, idx) => {
+          const isLocked = n.unlockDate && new Date(n.unlockDate) > new Date();
+          list.innerHTML += `
+            <div class="item" style="background:var(--glass); padding:22px; border-radius:28px; margin-bottom:18px; border-left:6px solid var(--crimson-bright); position:relative; animation-delay:${idx*0.06}s">
+              ${isLocked ? `<div style="position:absolute; inset:0; background:rgba(0,0,0,0.6); border-radius:28px; display:flex; align-items:center; justify-content:center; z-index:10; backdrop-filter:blur(6px)">🔒 Cápsula: Abre el ${new Date(n.unlockDate).toLocaleDateString()}</div>` : ''}
+              <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--crimson-bright); font-weight:bold; margin-bottom:10px;">
+                <span>${n.type} ${moodEmojis[n.mood || 'calm']}</span>
+                <span style="opacity:0.6">${new Date(n.date).toLocaleDateString()}</span>
+              </div>
+              <p style="margin:0 0 15px; line-height:1.6; font-size:1.05rem;">${n.text}</p>
+              ${n.audio ? `<audio controls src="${n.audio}" style="width:100%; height:38px; margin-bottom:12px; filter:invert(1)"></audio>` : ''}
+              <div style="font-size:0.85rem; opacity:0.8;">${n.tags.map(t=>`<span style="color:var(--crimson-bright); margin-right:10px;">#${t}</span>`).join('')}</div>
+              <div style="display:flex; justify-content:flex-end; gap:18px; margin-top:18px; font-size:1.2rem;">
+                ${!n.deleted ? `<span onclick="editNote(${n.id})" style="cursor:pointer">✏️</span><span onclick="toggleDel(${n.id})" style="cursor:pointer">🗑️</span>` : 
+                `<span onclick="toggleDel(${n.id})" style="cursor:pointer">↩️</span><span onclick="hardDel(${n.id})" style="cursor:pointer; color:red">❌</span>`}
+              </div>
+            </div>`;
+        });
+
+      // VISTA GALERIA
+      } else if(currentView === 'gallery') {
+        const cont = document.getElementById('gallery-container'); cont.innerHTML = "";
+        let galleryImgs = db.users[currentUser].gallery;
+        
+        // Ordenar galería por fecha (más reciente primero)
+        galleryImgs.sort((a,b) => new Date(b.date) - new Date(a.date));
+
+        if(search) galleryImgs = galleryImgs.filter(i => i.caption.toLowerCase().includes(search));
+        
+        let groups = {};
+        galleryImgs.forEach(img => {
+          const key = new Date(img.date).toLocaleString('es-ES', { month:'long', year:'numeric' });
+          if(!groups[key]) groups[key] = []; groups[key].push(img);
+        });
+
+        for(let m in groups) {
+          cont.innerHTML += `<div style="color:var(--crimson-bright); font-weight:bold; margin:30px 0 10px 10px; text-transform:uppercase; font-size:0.85rem; letter-spacing:2px;">${m}</div>`;
+          
+          let scrollRow = document.createElement('div'); 
+          scrollRow.className = "gallery-scroll";
+          
+          groups[m].forEach(img => {
+            let fechaRaw = new Date(img.date);
+            let fechaStr = fechaRaw.toLocaleDateString('es-ES', {day: '2-digit', month: 'short'});
+            let fechaParaBusqueda = fechaRaw.toLocaleDateString();
+            
+            scrollRow.innerHTML += `
+              <div class="gallery-card" onclick="openModal(${img.id})">
+                <div class="gallery-img-box">
+                  <img src="${img.src}">
+                </div>
+                <div style="font-size:0.85rem; font-weight:bold; color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                  ${img.caption || "Sin título"}
+                </div>
+                <div class="date-link" onclick="event.stopPropagation(); jumpToDate('${fechaParaBusqueda}')">
+                  📅 Ver día ${fechaStr}
+                </div>
+              </div>`;
+          });
+          cont.appendChild(scrollRow);
+        }
+
+      } else renderStats();
     }
 
-    function abrirModal(i) {
-      indiceEditando = i;
-      editarTexto.value = respuestas[i].texto;
-      editarTipo.value = respuestas[i].tipo;
-      modal.style.display = "flex";
+    function renderStats() {
+      const notes = db.users[currentUser].notes;
+      const moodEmojis = { calm:'✨', happy:'😊', love:'❤️', sad:'😢', angry:'🔥' };
+      const types = notes.reduce((acc, n) => { acc[n.type] = (acc[n.type] || 0) + 1; return acc; }, {});
+      const moods = notes.reduce((acc, n) => { acc[n.mood || 'calm'] = (acc[n.mood || 'calm'] || 0) + 1; return acc; }, {});
+
+      document.getElementById('stats-content').innerHTML = `
+        <div style="background:var(--glass); padding:30px; border-radius:35px; border:1px solid var(--glass-border);">
+          <p style="font-size:1.2rem; margin-bottom:25px;">Memorias Totales: <strong>${notes.length}</strong></p>
+          <h3 style="font-size:0.9rem; opacity:0.7; margin-bottom:15px;">BALANCE EMOCIONAL</h3>
+          ${Object.entries(moods).map(([m, c]) => `
+            <div style="margin-bottom:12px;">
+              <div style="display:flex; justify-content:space-between; font-size:0.85rem;"><span>${moodEmojis[m]} ${m.toUpperCase()}</span><span>${c}</span></div>
+              <div class="stat-bar-container"><div class="stat-bar-fill" style="width:${(c/notes.length)*100}%"></div></div>
+            </div>`).join('')}
+          <h3 style="font-size:0.9rem; opacity:0.7; margin:30px 0 15px;">CATEGORÍAS</h3>
+          ${Object.entries(types).map(([t, c]) => `
+            <div style="margin-bottom:12px;">
+              <div style="display:flex; justify-content:space-between; font-size:0.85rem;"><span>${t}</span><span>${c}</span></div>
+              <div class="stat-bar-container"><div class="stat-bar-fill" style="width:${(c/notes.length)*100}%; background:var(--text-primary); opacity:0.5;"></div></div>
+            </div>`).join('')}
+        </div>`;
     }
 
-    function guardarEdicion() {
-      respuestas[indiceEditando].texto = editarTexto.value;
-      respuestas[indiceEditando].tipo = editarTipo.value;
-      localStorage.setItem("respuestas", JSON.stringify(respuestas));
-      cerrarModal();
-      mostrarRespuestas();
+    // --- ACCIONES Y NAVEGACIÓN ---
+    function jumpToDate(dateString) {
+      switchView('journal');
+      document.getElementById('buscador').value = dateString;
+      render();
+      window.scrollTo({top:0, behavior:'smooth'});
     }
 
-    function cerrarModal() {
-      modal.style.display = "none";
+    function saveNote() {
+      const text = document.getElementById('note-text').value; if(!text && !audioBlob) return;
+      const note = {
+        id: editID || Date.now(), text, tags: document.getElementById('note-tags').value.split(',').map(t=>t.trim()),
+        type: document.getElementById('note-type').value, mood: selectedMood, audio: audioBlob,
+        unlockDate: document.getElementById('capsule-date').value, date: new Date().toISOString(), deleted: false
+      };
+      if(editID) {
+        const i = db.users[currentUser].notes.findIndex(n=>n.id === editID);
+        db.users[currentUser].notes[i] = note;
+      } else db.users[currentUser].notes.unshift(note);
+      saveDB(); cancelEdit(); render();
     }
 
-    function toggleModo() {
-      document.body.classList.toggle("noche");
-      const esNoche = document.body.classList.contains("noche");
-      botonModo.innerText = esNoche ? "☀️ Modo calma" : "🌙 Modo noche";
-      localStorage.setItem("modo", esNoche ? "noche" : "calma");
+    function switchView(v) {
+      currentView = v;
+      document.getElementById('view-journal').classList.toggle('hidden', v !== 'journal');
+      document.getElementById('view-gallery').classList.toggle('hidden', v !== 'gallery');
+      document.getElementById('view-stats').classList.toggle('hidden', v !== 'stats');
+      document.getElementById('bulb-btn').classList.toggle('hidden', v !== 'journal');
+      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+      document.getElementById('nav-'+v[0]).classList.add('active');
+      document.getElementById('app-title').innerText = v === 'stats' ? 'VÍNCULO' : v.toUpperCase();
+      render();
     }
 
-    if (localStorage.getItem("modo") === "noche") {
-      document.body.classList.add("noche");
-      botonModo.innerText = "☀️ Modo calma";
+    function saveImage() {
+      const file = document.getElementById('img-file').files[0]; if(!file) return;
+      const r = new FileReader(); r.onload = (e) => {
+        db.users[currentUser].gallery.unshift({ id:Date.now(), src:e.target.result, caption:document.getElementById('img-caption').value, date:new Date().toISOString() });
+        saveDB(); render();
+        document.getElementById('img-file').value = ""; document.getElementById('img-caption').value = "";
+      }; r.readAsDataURL(file);
     }
 
-    mostrarTitulo();
-    mostrarRespuestas();
+    // --- LÓGICA MODAL GALERÍA (EDITAR/BORRAR) ---
+    function openModal(id) { 
+      currentImgId = id;
+      const img = db.users[currentUser].gallery.find(i=>i.id===id); 
+      
+      // Llenar datos vista
+      document.getElementById('modal-img').src = img.src;
+      document.getElementById('modal-caption').innerText = img.caption || "Sin descripción";
+      document.getElementById('modal-date').innerText = new Date(img.date).toLocaleString();
 
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("sw.js");
+      // Llenar datos edición
+      document.getElementById('edit-img-caption').value = img.caption || "";
+      // Formatear fecha para el input type="date" (YYYY-MM-DD)
+      document.getElementById('edit-img-date').value = new Date(img.date).toISOString().split('T')[0];
+
+      // Resetear estado visual
+      toggleEditImgMode(false);
+      document.getElementById('image-modal').style.display='flex'; 
     }
+
+    function closeModal() { document.getElementById('image-modal').style.display='none'; }
+
+    function toggleEditImgMode(isEdit) {
+      if(isEdit) {
+        document.getElementById('modal-read-mode').classList.add('hidden');
+        document.getElementById('modal-edit-mode').classList.remove('hidden');
+      } else {
+        document.getElementById('modal-read-mode').classList.remove('hidden');
+        document.getElementById('modal-edit-mode').classList.add('hidden');
+      }
+    }
+
+    function deleteCurrentImg() {
+      if(confirm("¿Estás seguro de que quieres borrar esta imagen?")) {
+        db.users[currentUser].gallery = db.users[currentUser].gallery.filter(i => i.id !== currentImgId);
+        saveDB();
+        closeModal();
+        render(); // Actualizar galería
+      }
+    }
+
+    function saveImgChanges() {
+      const imgIndex = db.users[currentUser].gallery.findIndex(i => i.id === currentImgId);
+      if(imgIndex !== -1) {
+        // Actualizar Caption
+        db.users[currentUser].gallery[imgIndex].caption = document.getElementById('edit-img-caption').value;
+        
+        // Actualizar Fecha (Manteniendo la hora actual para evitar conflictos raros, o solo la fecha)
+        const newDateStr = document.getElementById('edit-img-date').value;
+        if(newDateStr) {
+            // Crear nueva fecha basada en el input, a medio día para evitar cambios de zona horaria drásticos
+            const newDate = new Date(newDateStr);
+            newDate.setHours(12,0,0);
+            db.users[currentUser].gallery[imgIndex].date = newDate.toISOString();
+        }
+
+        saveDB();
+        closeModal();
+        render(); // Re-renderizar para que se mueva de sitio si cambió la fecha
+      }
+    }
+
+    // --- UTILS ---
+    function setTab(t) { currentTab = t; render(); }
+    function setCatFilter(c) { selectedCat = c; document.querySelectorAll('#cat-filters .pill').forEach(p=>p.classList.toggle('active', p.innerText.includes(c))); render(); }
+    function toggleDel(id) { const i = db.users[currentUser].notes.findIndex(n=>n.id===id); db.users[currentUser].notes[i].deleted = !db.users[currentUser].notes[i].deleted; saveDB(); render(); }
+    function hardDel(id) { if(confirm("¿Eliminar alma?")) { db.users[currentUser].notes = db.users[currentUser].notes.filter(n=>n.id!==id); saveDB(); render(); } }
+    
+    function editNote(id) {
+      const n = db.users[currentUser].notes.find(n=>n.id===id);
+      document.getElementById('note-text').value = n.text;
+      document.getElementById('note-tags').value = n.tags.join(',');
+      selectedMood = n.mood || 'calm';
+      document.querySelectorAll('.mood-icon').forEach(icon => icon.classList.toggle('active', icon.innerText === {calm:'✨', happy:'😊', love:'❤️', sad:'😢', angry:'🔥'}[selectedMood]));
+      editID = id; document.getElementById('saveBtn').innerText = "Actualizar Registro"; document.getElementById('cancelEditBtn').classList.remove('hidden'); window.scrollTo({top:0, behavior:'smooth'});
+    }
+    
+    function cancelEdit() { editID = null; document.getElementById('note-text').value = ""; audioBlob = null; document.getElementById('audio-status').innerText = "Nota de voz"; document.getElementById('saveBtn').innerText = "Eternizar Registro"; document.getElementById('cancelEditBtn').classList.add('hidden'); }
+    
+    // --- TEMA INTERACTIVO (SOL/LUNA) ---
+    function toggleTheme(btn) { 
+      // Añadir clase de animación
+      btn.classList.add('spin-anim');
+      
+      // Esperar mitad de animación para cambiar el icono y el tema
+      setTimeout(() => {
+        document.body.classList.toggle('light-mode'); 
+        btn.innerText = document.body.classList.contains('light-mode') ? "☀️" : "🌙";
+      }, 250); // A los 250ms (mitad de 500ms) cambia el icono
+
+      // Quitar clase al terminar para poder animar de nuevo
+      setTimeout(() => {
+        btn.classList.remove('spin-anim');
+      }, 600);
+    }
+
+    function getPrompt() { document.getElementById('note-text').value = prompts[Math.floor(Math.random()*prompts.length)] + "\n"; }
+
+    document.getElementById("fechaHoy").innerText = new Date().toLocaleDateString('es-ES', { weekday:'long', day:'numeric', month:'long'});
   </script>
-
 </body>
 </html>
