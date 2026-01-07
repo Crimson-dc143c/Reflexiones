@@ -321,8 +321,8 @@
 </head>
 <body>
 
-  <div id="splash">
-    <div class="lotus">
+  <div id="splash" role="img" aria-label="Pantalla de bienvenida Crimson">
+    <div class="lotus" aria-hidden="true">
       <div class="core"></div>
       <div class="petal" style="--i:0"></div>
       <div class="petal" style="--i:1"></div>
@@ -339,9 +339,9 @@
   <div id="auth-screen" style="position:fixed; inset:0; background:var(--bg-gradient); z-index:10000; display:flex; align-items:center; justify-content:center;">
     <div id="auth-login" class="auth-card" style="text-align:center; background:var(--glass); padding:45px; border-radius:40px; border:1px solid var(--glass-border); width:85%; max-width:360px; backdrop-filter:blur(20px);">
       <h1 style="margin-bottom:30px;">CRIMSON</h1>
-      <input type="text" id="log-user" placeholder="Usuario">
-      <input type="password" id="log-pass" placeholder="Contraseña">
-      <button class="main-btn" onclick="handleLogin()" style="margin-top:10px;">Entrar al Diario</button>
+      <input aria-label="Usuario" type="text" id="log-user" placeholder="Usuario">
+      <input aria-label="Contraseña" type="password" id="log-pass" placeholder="Contraseña">
+      <button class="main-btn" onclick="handleLogin()" style="margin-top:10px;" aria-label="Entrar al diario">Entrar al Diario</button>
       <div style="margin-top:25px; font-size:0.85rem; opacity:0.6;">
         <span onclick="showAuth('auth-reg')" style="cursor:pointer">Unirse</span> | <span onclick="showAuth('auth-rec')" style="cursor:pointer">Recuperar</span>
       </div>
@@ -349,69 +349,69 @@
     
     <div id="auth-reg" class="auth-card hidden" style="text-align:center; background:var(--glass); padding:35px; border-radius:40px; border:1px solid var(--glass-border); width:85%; max-width:360px;">
       <h2>Nuevo Inicio</h2>
-      <input type="text" id="reg-user" placeholder="Usuario">
-      <input type="password" id="reg-pass" placeholder="Contraseña">
-      <select id="reg-q"><option>¿Lugar favorito?</option><option>¿Tu mascota?</option></select>
-      <input type="text" id="reg-a" placeholder="Respuesta">
+      <input aria-label="Nuevo usuario" type="text" id="reg-user" placeholder="Usuario">
+      <input aria-label="Nueva contraseña" type="password" id="reg-pass" placeholder="Contraseña">
+      <select aria-label="Pregunta de recuperación" id="reg-q"><option>¿Lugar favorito?</option><option>¿Tu mascota?</option></select>
+      <input aria-label="Respuesta recuperación" type="text" id="reg-a" placeholder="Respuesta">
       <button class="main-btn" onclick="handleRegister()">Registrar</button>
       <p onclick="showAuth('auth-login')" style="cursor:pointer; font-size:0.8rem; margin-top:15px;">Volver</p>
     </div>
 
     <div id="auth-rec" class="auth-card hidden" style="text-align:center; background:var(--glass); padding:35px; border-radius:40px; border:1px solid var(--glass-border); width:85%; max-width:360px;">
       <h2>Recuperar</h2>
-      <input type="text" id="rec-user" placeholder="Usuario" onblur="updateRecQuestion()">
+      <input aria-label="Usuario para recuperar" type="text" id="rec-user" placeholder="Usuario" onblur="updateRecQuestion()">
       <p id="rec-q-text" style="font-size:0.8rem; color:var(--crimson-bright);"></p>
-      <input type="text" id="rec-a" placeholder="Respuesta">
-      <input type="password" id="rec-newpass" placeholder="Nueva Clave" class="hidden">
+      <input aria-label="Respuesta recuperación" type="text" id="rec-a" placeholder="Respuesta">
+      <input aria-label="Nueva clave" type="password" id="rec-newpass" placeholder="Nueva Clave" class="hidden">
       <button class="main-btn" id="rec-btn" onclick="handleRecovery()">Verificar</button>
       <p onclick="showAuth('auth-login')" style="cursor:pointer; font-size:0.8rem; margin-top:15px;">Cancelar</p>
     </div>
   </div>
 
-  <div class="container hidden" id="main-app">
+  <div class="container hidden" id="main-app" role="main">
     <header>
       <div>
         <h1 id="app-title">DIARIO</h1>
         <div id="fechaHoy" style="font-size:0.85rem; opacity:0.6; font-weight:300;"></div>
       </div>
-      <button class="theme-toggle" onclick="toggleTheme(this)" id="themeBtn">🌙</button>
+      <button aria-label="Cambiar tema" class="theme-toggle" onclick="toggleTheme(this)" id="themeBtn">🌙</button>
     </header>
 
     <div style="display:flex; gap:15px; margin-bottom:25px;">
-      <input type="text" id="buscador" placeholder="Explorar recuerdos..." oninput="render()" style="margin-bottom:0">
-      <button id="bulb-btn" onclick="getPrompt()" style="background:var(--glass); border:1px solid var(--glass-border); border-radius:20px; padding:0 18px; cursor:pointer;">💡</button>
+      <input aria-label="Buscar recuerdos" type="text" id="buscador" placeholder="Explorar recuerdos..." oninput="render()" style="margin-bottom:0">
+      <button id="bulb-btn" aria-label="Sugerencia" onclick="getPrompt()" style="background:var(--glass); border:1px solid var(--glass-border); border-radius:20px; padding:0 18px; cursor:pointer;">💡</button>
     </div>
 
     <div id="view-journal">
       <div class="filter-bar" id="cat-filters" style="display:flex; gap:12px; overflow-x:auto; padding-bottom:15px; scrollbar-width:none;">
-        <div class="pill active" onclick="setCatFilter('Todos')">Todos</div>
-        <div class="pill" onclick="setCatFilter('Pensamiento')">💭 Pensamiento</div>
-        <div class="pill" onclick="setCatFilter('Objetivo')">🎯 Objetivo</div>
-        <div class="pill" onclick="setCatFilter('Canción')">🎵 Canción</div>
-        <div class="pill" onclick="setCatFilter('Regla')">📜 Regla</div>
-        <div class="pill" onclick="setCatFilter('Libro')">📚 Libro</div>
+        <div class="pill active" onclick="setCatFilter('Todos', event)">Todos</div>
+        <div class="pill" onclick="setCatFilter('Pensamiento', event)">💭 Pensamiento</div>
+        <div class="pill" onclick="setCatFilter('Objetivo', event)">🎯 Objetivo</div>
+        <div class="pill" onclick="setCatFilter('Canción', event)">🎵 Canción</div>
+        <div class="pill" onclick="setCatFilter('Regla', event)">📜 Regla</div>
+        <div class="pill" onclick="setCatFilter('Libro', event)">📚 Libro</div>
       </div>
 
-      <div class="composer">
-        <div class="mood-bar">
-          <span class="mood-icon active" onclick="setMood('calm', this)">✨</span>
-          <span class="mood-icon" onclick="setMood('happy', this)">😊</span>
-          <span class="mood-icon" onclick="setMood('love', this)">❤️</span>
-          <span class="mood-icon" onclick="setMood('sad', this)">😢</span>
-          <span class="mood-icon" onclick="setMood('angry', this)">🔥</span>
+      <div class="composer" aria-label="Compositor de entradas">
+        <div class="mood-bar" role="radiogroup" aria-label="Selector de estado de ánimo">
+          <span class="mood-icon active" role="radio" aria-checked="true" tabindex="0" onclick="setMood('calm', this)">✨</span>
+          <span class="mood-icon" role="radio" aria-checked="false" tabindex="0" onclick="setMood('happy', this)">😊</span>
+          <span class="mood-icon" role="radio" aria-checked="false" tabindex="0" onclick="setMood('love', this)">❤️</span>
+          <span class="mood-icon" role="radio" aria-checked="false" tabindex="0" onclick="setMood('sad', this)">😢</span>
+          <span class="mood-icon" role="radio" aria-checked="false" tabindex="0" onclick="setMood('angry', this)">🔥</span>
         </div>
-        <textarea id="note-text" placeholder="¿Cómo te sientes hoy?" rows="4"></textarea>
+        <textarea aria-label="Texto de la nota" id="note-text" placeholder="¿Cómo te sientes hoy?" rows="4"></textarea>
         
         <div class="rec-box">
-          <button id="audio-btn" class="rec-btn" onclick="toggleRecording()">🎙️</button>
+          <button id="audio-btn" aria-label="Grabar audio" class="rec-btn" onclick="toggleRecording()">🎙️</button>
           <span id="rec-label" class="rec-label" style="display:none; color:var(--crimson-glow); font-size:0.8rem; font-weight:bold;">● GRABANDO...</span>
           <span id="audio-status" style="font-size:0.75rem; opacity:0.6; margin-left:auto;">Nota de voz</span>
         </div>
 
-        <input type="text" id="note-tags" placeholder="#etiquetas, momentos...">
+        <input aria-label="Etiquetas" type="text" id="note-tags" placeholder="#etiquetas, momentos...">
         
         <div style="display:flex; gap:12px; align-items:center;">
-          <select id="note-type" style="flex:1;">
+          <select aria-label="Tipo de nota" id="note-type" style="flex:1;">
             <option>💭 Pensamiento</option>
             <option>🎯 Objetivo</option>
             <option>🎵 Canción</option>
@@ -419,35 +419,35 @@
             <option>📚 Libro</option>
           </select>
           <div style="flex:1; position:relative;">
-            <input type="date" id="capsule-date" style="margin-bottom:14px; text-align:center; font-weight:bold;">
+            <input aria-label="Fecha de la nota" type="date" id="capsule-date" style="margin-bottom:14px; text-align:center; font-weight:bold;">
             <span onclick="setTodayDate()" style="position:absolute; right:10px; top:12px; font-size:0.7rem; background:var(--crimson-dark); padding:3px 8px; border-radius:5px; cursor:pointer;">Hoy</span>
           </div>
         </div>
 
-        <button class="main-btn" id="saveBtn" onclick="saveNote()">Eternizar Registro</button>
-        <button class="main-btn hidden" id="cancelEditBtn" onclick="cancelEdit()" style="background:none; border:1px solid var(--crimson-bright); margin-top:10px; color:var(--crimson-bright);">Cancelar Edición</button>
+        <button aria-label="Guardar nota" class="main-btn" id="saveBtn" onclick="saveNote()">Eternizar Registro</button>
+        <button aria-label="Cancelar edición" class="main-btn hidden" id="cancelEditBtn" onclick="cancelEdit()" style="background:none; border:1px solid var(--crimson-bright); margin-top:10px; color:var(--crimson-bright);">Cancelar Edición</button>
       </div>
 
       <div style="display:flex; gap:15px; margin-bottom:20px;">
         <button class="pill active" id="tab-act" onclick="setTab('activos')">Vivos</button>
         <button class="pill" id="tab-pap" onclick="setTab('papelera')">Papelera</button>
       </div>
-      <div id="journal-list"></div>
+      <div id="journal-list" aria-live="polite"></div>
     </div>
 
-    <div id="view-gallery" class="hidden">
+    <div id="view-gallery" class="hidden" aria-label="Galería">
       <div class="composer">
-        <input type="file" id="img-file" accept="image/*" style="padding:12px">
-        <input type="text" id="img-caption" placeholder="Describe esta captura...">
+        <input aria-label="Seleccionar imagen" type="file" id="img-file" accept="image/*" style="padding:12px">
+        <input aria-label="Descripción imagen" type="text" id="img-caption" placeholder="Describe esta captura...">
         <div style="text-align:right; margin-bottom:10px;">
-           <input type="date" id="img-date-input" style="width:auto; display:inline-block;">
+           <input aria-label="Fecha imagen" type="date" id="img-date-input" style="width:auto; display:inline-block;">
         </div>
-        <button class="main-btn" onclick="saveImage()">Guardar Imagen</button>
+        <button aria-label="Guardar imagen" class="main-btn" onclick="saveImage()">Guardar Imagen</button>
       </div>
-      <div id="gallery-container"></div>
+      <div id="gallery-container" aria-live="polite"></div>
     </div>
 
-    <div id="view-mapa" class="hidden">
+    <div id="view-mapa" class="hidden" aria-label="La Marea">
       <h2 style="font-family:serif; letter-spacing:3px; margin-bottom:5px; text-align:center; opacity:0.9;">LA MAREA</h2>
       
       <div class="time-toggles">
@@ -456,8 +456,8 @@
       </div>
 
       <div id="marea-visual-box">
-         <div class="estrellas"></div>
-         <div class="nebula-container">
+         <div class="estrellas" aria-hidden="true"></div>
+         <div class="nebula-container" aria-hidden="true">
             <div class="aurora-hilo"></div>
             <div class="aurora-hilo dos"></div>
          </div>
@@ -469,13 +469,13 @@
 
       <div style="margin-top:20px;">
          <h3 style="font-size:0.7rem; letter-spacing:2px; opacity:0.4; text-align:center; text-transform:uppercase; margin-bottom:20px;">Ecos Recurrentes (Palabras)</h3>
-         <div class="cloud-container" id="word-cloud"></div>
+         <div class="cloud-container" id="word-cloud" aria-live="polite"></div>
       </div>
     </div>
 
   </div>
 
-  <nav class="bottom-nav hidden" id="nav-bar">
+  <nav class="bottom-nav hidden" id="nav-bar" role="navigation" aria-label="Navegación inferior">
     <div class="nav-item active" id="nav-j" onclick="switchView('journal')"><span class="icon">📜</span><span style="font-size:0.75rem">Diario</span></div>
     <div class="nav-item" id="nav-g" onclick="switchView('gallery')"><span class="icon">🖼️</span><span style="font-size:0.75rem">Fotos</span></div>
     <div class="nav-item" id="nav-m" onclick="switchView('mapa')"><span class="icon">🌊</span><span style="font-size:0.75rem">Marea</span></div>
@@ -483,7 +483,7 @@
   </nav>
 
   <div id="image-modal" style="position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:5000; display:none; flex-direction:column; align-items:center; justify-content:center; backdrop-filter:blur(15px); padding:20px;">
-    <img id="modal-img" src="" style="max-width:100%; max-height:55vh; border-radius:25px; box-shadow:0 0 40px rgba(0,0,0,0.5); object-fit:contain;">
+    <img id="modal-img" src="" alt="Imagen" style="max-width:100%; max-height:55vh; border-radius:25px; box-shadow:0 0 40px rgba(0,0,0,0.5); object-fit:contain;">
     <div id="modal-read-mode" style="width:100%; max-width:400px; text-align:center;">
       <p id="modal-caption" style="color:white; margin:20px 0 5px 0; font-size:1.1rem; text-align:center;"></p>
       <p id="modal-date" style="color:var(--crimson-bright); font-size:0.8rem; margin-bottom:20px;"></p>
@@ -494,8 +494,8 @@
       <button class="main-btn" onclick="closeModal()" style="width:auto; padding:12px 45px; background:#333; margin-top:20px;">Cerrar</button>
     </div>
     <div id="modal-edit-mode" class="hidden" style="width:100%; max-width:400px; margin-top:20px;">
-      <input type="text" id="edit-img-caption" placeholder="Nueva descripción">
-      <input type="date" id="edit-img-date">
+      <input aria-label="Editar descripción imagen" type="text" id="edit-img-caption" placeholder="Nueva descripción">
+      <input aria-label="Editar fecha imagen" type="date" id="edit-img-date">
       <div class="modal-btn-group">
         <button class="modal-btn btn-save" onclick="saveImgChanges()">💾 Guardar</button>
         <button class="modal-btn btn-edit" onclick="toggleEditImgMode(false)">Cancelar</button>
@@ -509,14 +509,19 @@
       const splash = document.getElementById("splash");
       setTimeout(() => { splash.classList.add("fade-out"); }, 3500); 
       setTodayDate(); 
+      // Allow closing splash with Escape for accessibility
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') splash.classList.add('fade-out');
+      });
     });
 
     // --- DATOS Y VARIABLES ---
     let db = JSON.parse(localStorage.getItem("crimson_vitality_v16")) || { users: {} };
     let currentUser = null, currentTab = 'activos', currentView = 'journal', editID = null;
-    let selectedCat = 'Todos', selectedMood = 'calm', audioBlob = null, mediaRecorder = null;
+    let selectedCat = 'Todos', selectedMood = 'calm', audioBlob = null, mediaRecorder = null, mediaStream = null;
     let mareaTimeFrame = 'week'; 
     let currentImgID = null;
+    let editAudio = null; // preserve audio when editing a note
 
     const prompts = ["¿Qué libro te hizo pensar hoy?", "¿Cuál es tu meta más ambiciosa?", "¿Qué emoción te define ahora?", "Escribe una regla que nunca romperás.", "¿Qué te quitó el sueño anoche?", "¿Un sonido que te traiga paz?"];
     const saveDB = () => localStorage.setItem("crimson_vitality_v16", JSON.stringify(db));
@@ -555,16 +560,27 @@
     // --- EMOCIONES ---
     function setMood(m, el) {
       selectedMood = m;
-      document.querySelectorAll('.mood-icon').forEach(i => i.classList.remove('active'));
+      document.querySelectorAll('.mood-icon').forEach(i => {
+        i.classList.remove('active');
+        i.setAttribute('aria-checked', 'false');
+      });
       el.classList.add('active');
+      el.setAttribute('aria-checked', 'true');
     }
 
     // --- AUTH ---
     function showAuth(id) { document.querySelectorAll('.auth-card').forEach(c => c.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); }
     function handleRegister() {
       const u = document.getElementById('reg-user').value.trim();
-      if(!u || db.users[u]) return alert("Usuario no disponible");
-      db.users[u] = { pass:document.getElementById('reg-pass').value, question:document.getElementById('reg-q').value, answer:document.getElementById('reg-a').value.toLowerCase(), notes:[], gallery:[] };
+      const pass = document.getElementById('reg-pass').value;
+      const q = document.getElementById('reg-q').value;
+      const a = document.getElementById('reg-a').value.trim().toLowerCase();
+
+      if(!u || !pass || !a) return alert("Completa todos los campos");
+      if(db.users[u]) return alert("Usuario no disponible");
+
+      // Initialize user structure defensively
+      db.users[u] = { pass: pass, question: q, answer: a, notes: [], gallery: [] };
       saveDB(); showAuth('auth-login');
     }
     function handleLogin() {
@@ -576,10 +592,14 @@
     }
     function updateRecQuestion() { const u = document.getElementById('rec-user').value.trim(); document.getElementById('rec-q-text').innerText = db.users[u]?.question || "No existe"; }
     function handleRecovery() {
-       const u = document.getElementById('rec-user').value.trim(), a = document.getElementById('rec-a').value.toLowerCase();
+       const u = document.getElementById('rec-user').value.trim(), a = document.getElementById('rec-a').value.trim().toLowerCase();
        if(document.getElementById('rec-btn').innerText === "Verificar") {
          if(db.users[u]?.answer === a) { document.getElementById('rec-newpass').classList.remove('hidden'); document.getElementById('rec-btn').innerText = "Cambiar Clave"; }
-       } else { db.users[u].pass = document.getElementById('rec-newpass').value; saveDB(); showAuth('auth-login'); }
+         else alert("Respuesta incorrecta");
+       } else {
+         if(!db.users[u]) return alert("Usuario no encontrado");
+         db.users[u].pass = document.getElementById('rec-newpass').value; saveDB(); showAuth('auth-login');
+       }
     }
 
     // --- AUDIO ---
@@ -588,22 +608,34 @@
       const label = document.getElementById('rec-label');
       if (!mediaRecorder || mediaRecorder.state === "inactive") {
         try {
-          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-          mediaRecorder = new MediaRecorder(stream);
+          mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          mediaRecorder = new MediaRecorder(mediaStream);
           let chunks = [];
-          mediaRecorder.ondataavailable = e => chunks.push(e.data);
+          mediaRecorder.ondataavailable = e => { if(e.data && e.data.size) chunks.push(e.data); };
           mediaRecorder.onstop = () => {
             const blob = new Blob(chunks, { type: 'audio/ogg; codecs=opus' });
             const r = new FileReader();
             r.onload = () => { audioBlob = r.result; document.getElementById('audio-status').innerText = "Voz lista ✅"; };
             r.readAsDataURL(blob);
+
+            // Stop all tracks to free the microphone
+            try {
+              if (mediaStream && mediaStream.getTracks) {
+                mediaStream.getTracks().forEach(t => t.stop());
+              }
+            } finally {
+              mediaStream = null;
+            }
           };
           mediaRecorder.start();
           btn.classList.add('recording'); label.style.display = 'inline';
-        } catch(e) { alert("Microfono bloqueado"); }
+        } catch(e) { alert("Micrófono bloqueado o no disponible"); }
       } else {
+        // Stop recorder, onstop handler will stop tracks
         mediaRecorder.stop();
         btn.classList.remove('recording'); label.style.display = 'none';
+        // clear mediaRecorder reference after a short delay to allow onstop to run
+        setTimeout(() => { mediaRecorder = null; }, 300);
       }
     }
 
@@ -611,27 +643,34 @@
     function getPrompt() { document.getElementById('note-text').value = prompts[Math.floor(Math.random() * prompts.length)]; }
 
     function saveNote() {
-      if(!currentUser) return;
+      if(!currentUser || !db.users[currentUser]) return alert("Sesión inválida. Vuelve a iniciar sesión.");
       const text = document.getElementById('note-text').value;
-      const dateVal = document.getElementById('capsule-date').value; 
+      const dateVal = document.getElementById('capsule-date').value || new Date().toISOString().split('T')[0];
       
-      if(!text && !audioBlob) return alert("Escribe o graba algo.");
+      if(!text && !audioBlob && !editAudio) return alert("Escribe o graba algo.");
+
+      const idValue = editID || (Date.now().toString() + Math.floor(Math.random()*1000).toString());
+      const audioToSave = audioBlob || editAudio || null;
 
       const newNote = {
-        id: editID || Date.now(),
+        id: idValue,
         text: text,
         mood: selectedMood,
         type: document.getElementById('note-type').value,
-        tags: document.getElementById('note-tags').value.split(',').map(t=>t.trim()).filter(t=>t),
+        tags: (document.getElementById('note-tags').value || '').split(',').map(t=>t.trim()).filter(t=>t),
         date: dateVal,
-        audio: audioBlob,
+        audio: audioToSave,
         deleted: false
       };
+
+      // Ensure user's notes array exists
+      if(!Array.isArray(db.users[currentUser].notes)) db.users[currentUser].notes = [];
 
       if(editID) {
         const idx = db.users[currentUser].notes.findIndex(n => n.id === editID);
         if(idx !== -1) db.users[currentUser].notes[idx] = newNote;
         editID = null;
+        editAudio = null;
         document.getElementById('saveBtn').innerText = "Eternizar Registro";
         document.getElementById('cancelEditBtn').classList.add('hidden');
       } else {
@@ -641,27 +680,31 @@
       saveDB();
       document.getElementById('note-text').value = "";
       document.getElementById('note-tags').value = "";
-      audioBlob = null; document.getElementById('audio-status').innerText = "Nota de voz";
+      audioBlob = null; editAudio = null; document.getElementById('audio-status').innerText = "Nota de voz";
       
       render();
       alert("Guardado exitosamente.");
     }
 
     function editNote(id) {
+      if(!currentUser || !db.users[currentUser]) return;
       const n = db.users[currentUser].notes.find(n => n.id === id);
       if(!n) return;
-      document.getElementById('note-text').value = n.text;
-      document.getElementById('note-tags').value = n.tags.join(', ');
-      document.getElementById('note-type').value = n.type;
-      document.getElementById('capsule-date').value = n.date;
-      selectedMood = n.mood;
+      document.getElementById('note-text').value = n.text || '';
+      document.getElementById('note-tags').value = (n.tags || []).join(', ');
+      document.getElementById('note-type').value = n.type || document.getElementById('note-type').options[0].value;
+      document.getElementById('capsule-date').value = n.date || new Date().toISOString().split('T')[0];
+      selectedMood = n.mood || 'calm';
       // Actualizar UI de mood
       document.querySelectorAll('.mood-icon').forEach(i => i.classList.remove('active'));
       const moodMap = {'calm':0, 'happy':1, 'love':2, 'sad':3, 'angry':4};
       const iconIndex = moodMap[n.mood] || 0;
-      document.querySelectorAll('.mood-icon')[iconIndex].classList.add('active');
+      const icons = document.querySelectorAll('.mood-icon');
+      if (icons[iconIndex]) icons[iconIndex].classList.add('active');
       
       editID = id;
+      editAudio = n.audio || null; // preserve audio if any
+      audioBlob = null; // if user records new audio it will overwrite
       document.getElementById('saveBtn').innerText = "Guardar Cambios";
       document.getElementById('cancelEditBtn').classList.remove('hidden');
       window.scrollTo(0,0);
@@ -669,6 +712,8 @@
 
     function cancelEdit() {
       editID = null;
+      editAudio = null;
+      audioBlob = null;
       document.getElementById('saveBtn').innerText = "Eternizar Registro";
       document.getElementById('cancelEditBtn').classList.add('hidden');
       document.getElementById('note-text').value = "";
@@ -676,6 +721,7 @@
     }
 
     function deleteNote(id, perm = false) {
+      if(!currentUser || !db.users[currentUser]) return;
       const idx = db.users[currentUser].notes.findIndex(n => n.id === id);
       if(idx === -1) return;
       if(perm) db.users[currentUser].notes.splice(idx, 1);
@@ -684,6 +730,7 @@
     }
     
     function restoreNote(id) {
+      if(!currentUser || !db.users[currentUser]) return;
       const n = db.users[currentUser].notes.find(n => n.id === id);
       if(n) { n.deleted = false; saveDB(); render(); }
     }
@@ -695,49 +742,128 @@
       render();
     }
 
-    function setCatFilter(c) {
+    function setCatFilter(c, evt) {
       selectedCat = c;
       document.querySelectorAll('#cat-filters .pill').forEach(p => p.classList.remove('active'));
-      event.target.classList.add('active');
+      if(evt && evt.currentTarget) evt.currentTarget.classList.add('active');
+      else if(evt && evt.target) evt.target.classList.add('active');
       render();
     }
 
     // --- RENDERIZADO PRINCIPAL ---
     function render() {
-      if(!currentUser) return;
+      if(!currentUser || !db.users[currentUser]) return;
       renderJournal();
       if(currentView === 'gallery') renderGallery();
       if(currentView === 'mapa') renderMarea();
     }
 
     function renderJournal() {
+      if(!currentUser || !db.users[currentUser]) return;
       const list = document.getElementById('journal-list');
-      const search = document.getElementById('buscador').value.toLowerCase();
+      const search = (document.getElementById('buscador').value || '').toLowerCase();
+      const notesArr = Array.isArray(db.users[currentUser].notes) ? db.users[currentUser].notes : [];
       
-      const filtered = db.users[currentUser].notes.filter(n => {
+      const filtered = notesArr.filter(n => {
         const isDel = currentTab === 'papelera' ? n.deleted : !n.deleted;
-        const matchCat = selectedCat === 'Todos' || n.type.includes(selectedCat);
-        const matchSearch = n.text.toLowerCase().includes(search) || n.tags.some(t => t.toLowerCase().includes(search));
+        const matchCat = selectedCat === 'Todos' || (n.type && n.type.includes(selectedCat));
+        const textLower = (n.text || '').toLowerCase();
+        const matchSearch = textLower.includes(search) || (n.tags || []).some(t => t.toLowerCase().includes(search));
         return isDel && matchCat && matchSearch;
       }).sort((a,b) => new Date(b.date) - new Date(a.date));
 
-      list.innerHTML = filtered.map(n => `
-        <div class="note-card item" style="border-left: 4px solid ${getMoodColor(n.mood)}">
-          <div class="note-header">
-             <span style="font-size:1.2rem">${getMoodEmoji(n.mood)} <span style="font-size:0.8rem;opacity:0.7;margin-left:5px">${n.type}</span></span>
-             <span class="note-date">${n.date}</span>
-          </div>
-          <p style="white-space:pre-wrap; line-height:1.5">${n.text}</p>
-          ${n.audio ? `<audio controls src="${n.audio}" style="width:100%; margin-top:10px; opacity:0.8; height:35px"></audio>` : ''}
-          <div class="note-tags">${n.tags.map(t=>`<span class="note-tag">#${t}</span>`).join('')}</div>
-          <div class="note-actions">
-            ${currentTab === 'activos' 
-              ? `<span class="action-icon" onclick="editNote(${n.id})">✏️</span><span class="action-icon" onclick="deleteNote(${n.id})">🗑️</span>`
-              : `<span class="action-icon" onclick="restoreNote(${n.id})">♻️</span><span class="action-icon" onclick="deleteNote(${n.id}, true)">❌</span>`
-            }
-          </div>
-        </div>
-      `).join('') || `<p style="text-align:center; opacity:0.5; margin-top:30px">Vacío...</p>`;
+      // Clear list
+      list.innerHTML = '';
+      if(filtered.length === 0) {
+        const p = document.createElement('p');
+        p.style.textAlign = 'center'; p.style.opacity = '0.5'; p.style.marginTop = '30px'; p.textContent = 'Vacío...';
+        list.appendChild(p);
+        return;
+      }
+
+      filtered.forEach(n => {
+        const card = document.createElement('div');
+        card.className = 'note-card item';
+        card.style.borderLeft = `4px solid ${getMoodColor(n.mood)}`;
+
+        const header = document.createElement('div');
+        header.className = 'note-header';
+        const left = document.createElement('span');
+        left.style.fontSize = '1.2rem';
+        left.innerHTML = `${getMoodEmoji(n.mood)} <span style="font-size:0.8rem;opacity:0.7;margin-left:5px">${escapeHtml(n.type || '')}</span>`;
+        const date = document.createElement('span');
+        date.className = 'note-date';
+        date.textContent = n.date || '';
+        header.appendChild(left);
+        header.appendChild(date);
+
+        const para = document.createElement('p');
+        para.style.whiteSpace = 'pre-wrap';
+        para.style.lineHeight = '1.5';
+        para.textContent = n.text || '';
+
+        card.appendChild(header);
+        card.appendChild(para);
+
+        if(n.audio) {
+          const audioEl = document.createElement('audio');
+          audioEl.controls = true;
+          audioEl.src = n.audio;
+          audioEl.style.width = '100%';
+          audioEl.style.marginTop = '10px';
+          audioEl.style.opacity = '0.8';
+          audioEl.style.height = '35px';
+          card.appendChild(audioEl);
+        }
+
+        const tagContainer = document.createElement('div');
+        tagContainer.className = 'note-tags';
+        (n.tags || []).forEach(t => {
+          const span = document.createElement('span');
+          span.className = 'note-tag';
+          span.textContent = `#${t}`;
+          tagContainer.appendChild(span);
+        });
+        card.appendChild(tagContainer);
+
+        const actions = document.createElement('div');
+        actions.className = 'note-actions';
+
+        if(currentTab === 'activos') {
+          const editBtn = document.createElement('span');
+          editBtn.className = 'action-icon';
+          editBtn.style.cursor = 'pointer';
+          editBtn.textContent = '✏️';
+          editBtn.addEventListener('click', () => editNote(n.id));
+          const delBtn = document.createElement('span');
+          delBtn.className = 'action-icon';
+          delBtn.style.cursor = 'pointer';
+          delBtn.textContent = '🗑️';
+          delBtn.addEventListener('click', () => {
+            if(confirm('Mover a la papelera?')) deleteNote(n.id);
+          });
+          actions.appendChild(editBtn);
+          actions.appendChild(delBtn);
+        } else {
+          const restoreBtn = document.createElement('span');
+          restoreBtn.className = 'action-icon';
+          restoreBtn.style.cursor = 'pointer';
+          restoreBtn.textContent = '♻️';
+          restoreBtn.addEventListener('click', () => restoreNote(n.id));
+          const permBtn = document.createElement('span');
+          permBtn.className = 'action-icon';
+          permBtn.style.cursor = 'pointer';
+          permBtn.textContent = '❌';
+          permBtn.addEventListener('click', () => {
+            if(confirm('Eliminar permanentemente?')) deleteNote(n.id, true);
+          });
+          actions.appendChild(restoreBtn);
+          actions.appendChild(permBtn);
+        }
+
+        card.appendChild(actions);
+        list.appendChild(card);
+      });
     }
 
     function getMoodColor(m) {
@@ -753,6 +879,7 @@
 
     // --- GALERÍA (MESES) ---
     function saveImage() {
+       if(!currentUser || !db.users[currentUser]) return alert("Sesión inválida.");
        const file = document.getElementById('img-file').files[0];
        const cap = document.getElementById('img-caption').value;
        const dateVal = document.getElementById('img-date-input').value || new Date().toISOString().split('T')[0];
@@ -760,8 +887,9 @@
        if(!file) return alert("Selecciona imagen");
        const reader = new FileReader();
        reader.onload = function(e) {
+          if(!Array.isArray(db.users[currentUser].gallery)) db.users[currentUser].gallery = [];
           db.users[currentUser].gallery.push({
-             id: Date.now(),
+             id: Date.now().toString() + Math.floor(Math.random()*1000).toString(),
              src: e.target.result,
              caption: cap,
              date: dateVal
@@ -775,8 +903,9 @@
     }
 
     function renderGallery() {
+      if(!currentUser || !db.users[currentUser]) return;
       const container = document.getElementById('gallery-container');
-      const images = db.users[currentUser].gallery || [];
+      const images = Array.isArray(db.users[currentUser].gallery) ? db.users[currentUser].gallery : [];
       
       const groups = {};
       images.forEach(img => {
@@ -788,12 +917,15 @@
 
       const sortedKeys = Object.keys(groups).sort().reverse();
 
+      container.innerHTML = '';
       if(sortedKeys.length === 0) {
-          container.innerHTML = `<p style="text-align:center; opacity:0.5; margin-top:30px">Sin recuerdos visuales...</p>`;
+          const p = document.createElement('p');
+          p.style.textAlign = 'center'; p.style.opacity = '0.5'; p.style.marginTop = '30px';
+          p.textContent = 'Sin recuerdos visuales...';
+          container.appendChild(p);
           return;
       }
 
-      let html = '';
       sortedKeys.forEach(key => {
           const [y, m] = key.split('-');
           const dateObj = new Date(y, m - 1);
@@ -802,32 +934,59 @@
 
           groups[key].sort((a,b) => new Date(b.date) - new Date(a.date));
 
-          html += `
-            <div class="month-group">
-                <div class="month-title">${capitalizedMonth}</div>
-                <div class="gallery-scroll">
-                    ${groups[key].map(img => `
-                        <div class="gallery-card" onclick="openModal(${img.id})">
-                           <div class="gallery-img-box"><img src="${img.src}"></div>
-                           <div style="font-size:0.8rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; opacity:0.8">${img.caption || 'Sin título'}</div>
-                           <span class="date-link">${img.date}</span>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-          `;
+          const monthGroup = document.createElement('div');
+          monthGroup.className = 'month-group';
+          const title = document.createElement('div');
+          title.className = 'month-title';
+          title.textContent = capitalizedMonth;
+          const scroll = document.createElement('div');
+          scroll.className = 'gallery-scroll';
+
+          groups[key].forEach(img => {
+            const card = document.createElement('div');
+            card.className = 'gallery-card';
+            card.addEventListener('click', () => openModal(img.id));
+
+            const box = document.createElement('div');
+            box.className = 'gallery-img-box';
+            const image = document.createElement('img');
+            image.src = img.src;
+            image.alt = img.caption || 'Imagen';
+            box.appendChild(image);
+
+            const caption = document.createElement('div');
+            caption.style.fontSize = '0.8rem';
+            caption.style.whiteSpace = 'nowrap';
+            caption.style.overflow = 'hidden';
+            caption.style.textOverflow = 'ellipsis';
+            caption.style.opacity = '0.8';
+            caption.textContent = img.caption || 'Sin título';
+
+            const dateLink = document.createElement('span');
+            dateLink.className = 'date-link';
+            dateLink.textContent = img.date || '';
+
+            card.appendChild(box);
+            card.appendChild(caption);
+            card.appendChild(dateLink);
+            scroll.appendChild(card);
+          });
+
+          monthGroup.appendChild(title);
+          monthGroup.appendChild(scroll);
+          container.appendChild(monthGroup);
       });
-      container.innerHTML = html;
     }
 
     // Modal Galería Logic
     function openModal(id) {
-       const img = db.users[currentUser].gallery.find(i => i.id === id);
+       if(!currentUser || !db.users[currentUser]) return;
+       const img = (db.users[currentUser].gallery || []).find(i => i.id === id);
        if(!img) return;
        currentImgID = id;
        document.getElementById('modal-img').src = img.src;
        document.getElementById('modal-caption').innerText = img.caption || "";
-       document.getElementById('modal-date').innerText = img.date;
+       document.getElementById('modal-date').innerText = img.date || "";
        
        document.getElementById('modal-read-mode').classList.remove('hidden');
        document.getElementById('modal-edit-mode').classList.add('hidden');
@@ -838,9 +997,10 @@
     
     function toggleEditImgMode(edit) {
         if(edit) {
-            const img = db.users[currentUser].gallery.find(i => i.id === currentImgID);
+            const img = (db.users[currentUser].gallery || []).find(i => i.id === currentImgID);
+            if(!img) return;
             document.getElementById('edit-img-caption').value = img.caption || "";
-            document.getElementById('edit-img-date').value = img.date;
+            document.getElementById('edit-img-date').value = img.date || "";
             document.getElementById('modal-read-mode').classList.add('hidden');
             document.getElementById('modal-edit-mode').classList.remove('hidden');
         } else {
@@ -850,7 +1010,8 @@
     }
     
     function saveImgChanges() {
-        const idx = db.users[currentUser].gallery.findIndex(i => i.id === currentImgID);
+        if(!currentUser || !db.users[currentUser]) return;
+        const idx = (db.users[currentUser].gallery || []).findIndex(i => i.id === currentImgID);
         if(idx !== -1) {
             db.users[currentUser].gallery[idx].caption = document.getElementById('edit-img-caption').value;
             db.users[currentUser].gallery[idx].date = document.getElementById('edit-img-date').value;
@@ -861,10 +1022,13 @@
     }
     
     function deleteCurrentImg() {
+        if(!currentUser || !db.users[currentUser]) return;
         if(confirm("¿Borrar esta imagen?")) {
-            const idx = db.users[currentUser].gallery.findIndex(i => i.id === currentImgID);
-            db.users[currentUser].gallery.splice(idx, 1);
-            saveDB(); renderGallery(); closeModal();
+            const idx = (db.users[currentUser].gallery || []).findIndex(i => i.id === currentImgID);
+            if(idx !== -1) {
+              db.users[currentUser].gallery.splice(idx, 1);
+              saveDB(); renderGallery(); closeModal();
+            }
         }
     }
 
@@ -877,17 +1041,22 @@
     }
 
     function renderMarea() {
+      if(!currentUser || !db.users[currentUser]) return;
       // 1. Filtrar notas por tiempo
       const now = new Date();
-      const notes = db.users[currentUser].notes.filter(n => !n.deleted && n.text);
+      const notes = (db.users[currentUser].notes || []).filter(n => !n.deleted && n.text);
       let filteredNotes = [];
 
       if(mareaTimeFrame === 'week') {
          const oneWeekAgo = new Date(); oneWeekAgo.setDate(now.getDate() - 7);
-         filteredNotes = notes.filter(n => new Date(n.date) >= oneWeekAgo);
+         filteredNotes = notes.filter(n => {
+           try { return new Date(n.date + 'T00:00:00') >= oneWeekAgo; } catch(e){ return false; }
+         });
       } else {
          const oneMonthAgo = new Date(); oneMonthAgo.setMonth(now.getMonth() - 1);
-         filteredNotes = notes.filter(n => new Date(n.date) >= oneMonthAgo);
+         filteredNotes = notes.filter(n => {
+           try { return new Date(n.date + 'T00:00:00') >= oneMonthAgo; } catch(e){ return false; }
+         });
       }
 
       // --- 2. LÓGICA DE REACTIVIDAD (CAMBIO DE COLORES) ---
@@ -896,7 +1065,10 @@
       filteredNotes.forEach(n => moodCounts[n.mood] = (moodCounts[n.mood] || 0) + 1);
       
       // Encontrar emoción dominante (si no hay, 'calm')
-      let dominantMood = Object.keys(moodCounts).reduce((a, b) => moodCounts[a] > moodCounts[b] ? a : b, 'calm');
+      let dominantMood = 'calm';
+      if (Object.keys(moodCounts).length > 0) {
+        dominantMood = Object.keys(moodCounts).reduce((a, b) => moodCounts[a] > moodCounts[b] ? a : b);
+      }
       
       // Mapa de colores por emoción (Aurora / Nebulosa)
       const moodColors = {
@@ -915,14 +1087,13 @@
       document.documentElement.style.setProperty('--c3', c[2]);
       document.documentElement.style.setProperty('--c4', c[3]);
 
-
       // --- 3. NUBE DE PALABRAS (FLEXBOX SIN SUPERPOSICIÓN) ---
       const stopWords = ['el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas', 'y', 'o', 'pero', 'si', 'no', 'en', 'de', 'del', 'a', 'al', 'por', 'para', 'con', 'sin', 'sobre', 'mi', 'tu', 'su', 'me', 'te', 'se', 'lo', 'le', 'que', 'qué', 'es', 'son', 'fue', 'era', 'estoy', 'estas', 'esta', 'está', 'hoy', 'ayer', 'mañana', 'como', 'cuando', 'donde', 'porque', 'muy', 'más', 'mas', 'todo', 'nada', 'eso', 'esto', 'ese', 'este'];
 
       let wordCounts = {};
       
       filteredNotes.forEach(n => {
-          let cleanText = n.text.toLowerCase().replace(/[.,/#!$%^&*;:{}=\-_`~()?"¡!¿]/g,"");
+          let cleanText = (n.text || '').toLowerCase().replace(/[.,/#!$%^&*;:{}=\-_`~()?"¡!¿]/g,"");
           let words = cleanText.split(/\s+/);
           words.forEach(w => {
               if(w.length > 2 && !stopWords.includes(w)) {
@@ -936,21 +1107,31 @@
                               .slice(0, 18); // Top 18 palabras
 
       const cloudBox = document.getElementById('word-cloud');
+      cloudBox.innerHTML = '';
       
       if(sortedWords.length === 0) {
-          cloudBox.innerHTML = `<p style="color:var(--text-dim); text-align:center; width:100%;">Silencio en las aguas...</p>`;
+          const p = document.createElement('p');
+          p.style.color = 'var(--text-dim)';
+          p.style.textAlign = 'center';
+          p.style.width = '100%';
+          p.textContent = 'Silencio en las aguas...';
+          cloudBox.appendChild(p);
       } else {
           // Generación con márgenes aleatorios para aspecto orgánico pero sin choque
-          cloudBox.innerHTML = sortedWords.map(item => {
+          sortedWords.forEach(item => {
               const w = item[0];
               const count = item[1];
               const size = 0.8 + (count * 0.15); 
-              // Márgenes aleatorios pequeños para que no se vea como grilla perfecta
               const mTop = Math.floor(Math.random() * 10);
               const mLeft = Math.floor(Math.random() * 10);
-              
-              return `<span class="cloud-tag" style="font-size:${size}rem; margin: ${mTop}px ${mLeft}px;">${w}</span>`;
-          }).join('');
+
+              const span = document.createElement('span');
+              span.className = 'cloud-tag';
+              span.style.fontSize = `${size}rem`;
+              span.style.margin = `${mTop}px ${mLeft}px`;
+              span.textContent = w;
+              cloudBox.appendChild(span);
+          });
       }
 
       const insights = [
@@ -974,6 +1155,23 @@
       document.getElementById(v === 'journal' ? 'nav-j' : v === 'gallery' ? 'nav-g' : 'nav-m').classList.add('active');
       
       render();
+    }
+
+    // --- UTILITIES ---
+    function escapeHtml(unsafe) {
+      if (unsafe === undefined || unsafe === null) return '';
+      return String(unsafe).replace(/[&<>"'`=\/]/g, function (s) {
+        return ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#39;',
+          '/': '&#x2F;',
+          '`': '&#x60;',
+          '=': '&#x3D;'
+        })[s];
+      });
     }
 
   </script>
